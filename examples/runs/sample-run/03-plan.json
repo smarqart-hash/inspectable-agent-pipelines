@@ -1,0 +1,52 @@
+{
+  "$schema_version": "1.0.0",
+  "agent": "plan-agent",
+  "generated_at": "2026-06-30T12:00:00.000Z",
+  "implementation_brief": {
+    "title": "Procurement notice summarizer extension",
+    "target_user": "small suppliers",
+    "scope": [
+      "Parse one supported procurement notice page format.",
+      "Produce a short summary with retained source links.",
+      "Show uncertainty when required fields are missing."
+    ],
+    "out_of_scope": [
+      "Automated bid/no-bid recommendations.",
+      "Multi-portal crawling.",
+      "Legal compliance scoring."
+    ],
+    "steps": [
+      "Create fixtures from public procurement notices.",
+      "Define extraction and summary output contracts.",
+      "Build a browser-side parser for the first supported page format.",
+      "Render a source-linked summary panel.",
+      "Add regression tests for malformed notices."
+    ]
+  },
+  "claims": [
+    {
+      "id": "C-001",
+      "text": "The target users are small suppliers.",
+      "supported_by": [
+        "REQ-USER-001"
+      ]
+    },
+    {
+      "id": "C-002",
+      "text": "The MVP should preserve source links in summaries.",
+      "supported_by": [
+        "RISK-001"
+      ]
+    },
+    {
+      "id": "C-003",
+      "text": "The extension will reduce review time by 60 percent.",
+      "supported_by": []
+    }
+  ],
+  "open_questions": [
+    "which procurement portals are in scope",
+    "summary length",
+    "supported languages"
+  ]
+}

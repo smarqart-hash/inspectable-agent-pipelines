@@ -1,0 +1,16 @@
+{
+  "$schema_version": "1.0.0",
+  "gate": "review-gate",
+  "generated_at": "2026-06-30T12:00:00.000Z",
+  "verdict": "pass_with_findings",
+  "findings": [
+    {
+      "id": "F-001",
+      "severity": "high",
+      "claim_id": "C-003",
+      "finding": "Claim \"The extension will reduce review time by 60 percent.\" has no upstream support.",
+      "required_action": "Drop the claim or add a checked evidence reference.",
+      "status": "resolved"
+    }
+  ]
+}

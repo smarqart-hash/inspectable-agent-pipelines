@@ -1,0 +1,31 @@
+{
+  "$schema_version": "1.0.0",
+  "agent": "intake-agent",
+  "generated_at": "2026-06-30T12:00:00.000Z",
+  "request_summary": {
+    "goal": "Build a browser extension that summarizes long procurement notices.",
+    "users": [
+      "small suppliers"
+    ],
+    "constraints": [
+      "browser extension",
+      "procurement notices",
+      "summaries must preserve source links"
+    ],
+    "unknowns": [
+      "which procurement portals are in scope",
+      "summary length",
+      "supported languages"
+    ]
+  },
+  "evidence_refs": [
+    {
+      "id": "REQ-001",
+      "label": "Build a browser extension that summarizes long procurement notices for small suppliers."
+    },
+    {
+      "id": "REQ-USER-001",
+      "label": "small suppliers"
+    }
+  ]
+}

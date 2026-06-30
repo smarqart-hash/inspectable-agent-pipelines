@@ -1,0 +1,32 @@
+{
+  "name": "inspectable-agent-pipelines",
+  "version": "0.1.0",
+  "description": "A minimal TypeScript pattern for inspectable agent pipelines with contracts, evals and run logs.",
+  "main": "src/cli.ts",
+  "scripts": {
+    "demo": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run typecheck && npm test && npm run demo"
+  },
+  "keywords": [
+    "agents",
+    "llm",
+    "evals",
+    "zod",
+    "observability"
+  ],
+  "author": "Stefan Marquart",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.1",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
+  }
+}

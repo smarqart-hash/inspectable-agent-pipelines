@@ -1,0 +1,43 @@
+{
+  "$schema_version": "1.0.0",
+  "agent": "risk-agent",
+  "generated_at": "2026-06-30T12:00:00.000Z",
+  "verdict": "needs_review",
+  "risks": [
+    {
+      "id": "RISK-001",
+      "severity": "medium",
+      "risk": "The request implies source-grounded summaries, but no source-retention requirement is specified.",
+      "evidence_refs": [
+        {
+          "id": "REQ-001",
+          "label": "Build a browser extension that summarizes long procurement notices for small suppliers."
+        },
+        {
+          "id": "REQ-USER-001",
+          "label": "small suppliers"
+        }
+      ],
+      "mitigation": "Keep source links attached to each summary sentence or section."
+    },
+    {
+      "id": "RISK-002",
+      "severity": "medium",
+      "risk": "The target portals and languages are unspecified.",
+      "evidence_refs": [
+        {
+          "id": "REQ-001",
+          "label": "Build a browser extension that summarizes long procurement notices."
+        }
+      ],
+      "mitigation": "Limit the MVP to one portal format and one language until fixtures exist."
+    }
+  ],
+  "unsupported_assumptions": [
+    {
+      "id": "ASSUMP-001",
+      "assumption": "The extension will measurably reduce review time.",
+      "reason": "No baseline, user study or benchmark is available in the request."
+    }
+  ]
+}
