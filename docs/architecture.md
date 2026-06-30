@@ -13,25 +13,7 @@ The point is to show the shape of an inspectable pipeline before adding model co
 
 ## Flow
 
-```mermaid
-flowchart LR
-    R["Product request"] --> I["intake-agent"]
-    I --> IV["Zod validation"]
-    IV --> K["risk-agent"]
-    K --> KV["Zod validation"]
-    KV --> P["plan-agent"]
-    P --> PV["Zod validation"]
-    PV --> G["review-gate"]
-    G --> GV["Zod validation"]
-    GV --> D["decision-writer"]
-    D --> OUT["Run packet"]
-
-    I --> LOG["run.jsonl"]
-    K --> LOG
-    P --> LOG
-    G --> LOG
-    D --> LOG
-```
+![Inspectable pipeline architecture](../assets/architecture-flow.png)
 
 ## Contracts
 
