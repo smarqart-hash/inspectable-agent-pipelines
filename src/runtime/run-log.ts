@@ -15,12 +15,13 @@ export class RunLogger {
   constructor(
     private readonly runId: string,
     private readonly filePath: string,
+    private readonly nowIso: () => string = () => new Date().toISOString(),
   ) {}
 
   async event(event: Omit<RunLogEvent, 'ts' | 'run_id'>): Promise<void> {
     await mkdir(dirname(this.filePath), { recursive: true });
     const row: RunLogEvent = {
-      ts: new Date().toISOString(),
+      ts: this.nowIso(),
       run_id: this.runId,
       ...event,
     };

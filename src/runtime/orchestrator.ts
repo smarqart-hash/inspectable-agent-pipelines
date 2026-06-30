@@ -16,6 +16,8 @@ import type { ReviewOutput } from '../contracts/review.contract.js';
 import { ReviewOutputSchema } from '../contracts/review.contract.js';
 import type { RiskOutput } from '../contracts/risk.contract.js';
 import { RiskOutputSchema } from '../contracts/risk.contract.js';
+import type { PipelineClock } from './clock.js';
+import { systemClock } from './clock.js';
 import { createRunId } from './ids.js';
 import { RunLogger } from './run-log.js';
 import { validateOrThrow } from './validate.js';
@@ -33,6 +35,7 @@ export type PipelineOptions = {
   outputDir?: string;
   runId?: string;
   overrides?: PipelineOverrides;
+  clock?: PipelineClock;
 };
 
 export type PipelineSummary = {
@@ -48,7 +51,8 @@ export async function runInspectablePipeline(options: PipelineOptions): Promise<
   const runId = options.runId ?? createRunId(input.request);
   const outputDir = options.outputDir ?? join('examples', 'runs', runId);
   const logPath = join(outputDir, 'run.jsonl');
-  const logger = new RunLogger(runId, logPath);
+  const clock = options.clock ?? systemClock;
+  const logger = new RunLogger(runId, logPath, clock.nowIso);
   const files: string[] = [];
 
   await mkdir(outputDir, { recursive: true });
@@ -58,7 +62,7 @@ export async function runInspectablePipeline(options: PipelineOptions): Promise<
   await logger.event({ event: 'run.started', status: 'started', detail: { output_dir: outputDir } });
 
   try {
-    const intake = await timedStep(logger, 'intake', async () =>
+    const intake = await timedStep(logger, clock, 'intake', async () =>
       validateOrThrow(
         IntakeOutputSchema,
         await intakeMock(input, options.overrides?.intake),
@@ -67,12 +71,12 @@ export async function runInspectablePipeline(options: PipelineOptions): Promise<
     );
     await writeJson(join(outputDir, '01-intake.json'), intake, files);
 
-    const risk = await timedStep(logger, 'risk', async () =>
+    const risk = await timedStep(logger, clock, 'risk', async () =>
       validateOrThrow(RiskOutputSchema, await riskMock({ intake }, options.overrides?.risk), 'risk-agent'),
     );
     await writeJson(join(outputDir, '02-risk.json'), risk, files);
 
-    const plan = await timedStep(logger, 'plan', async () =>
+    const plan = await timedStep(logger, clock, 'plan', async () =>
       validateOrThrow(
         PlanOutputSchema,
         await planMock({ intake, risk }, options.overrides?.plan),
@@ -81,7 +85,7 @@ export async function runInspectablePipeline(options: PipelineOptions): Promise<
     );
     await writeJson(join(outputDir, '03-plan.json'), plan, files);
 
-    const review = await timedStep(logger, 'review', async () =>
+    const review = await timedStep(logger, clock, 'review', async () =>
       validateOrThrow(
         ReviewOutputSchema,
         await reviewGateMock({ plan }, options.overrides?.review),
@@ -90,7 +94,7 @@ export async function runInspectablePipeline(options: PipelineOptions): Promise<
     );
     await writeJson(join(outputDir, '04-review.json'), review, files);
 
-    const decision = await timedStep(logger, 'decision', async () =>
+    const decision = await timedStep(logger, clock, 'decision', async () =>
       validateOrThrow(
         DecisionOutputSchema,
         await decisionWriterMock({ plan, review }, options.overrides?.decision),
@@ -123,8 +127,13 @@ export async function runInspectablePipeline(options: PipelineOptions): Promise<
   }
 }
 
-async function timedStep<T>(logger: RunLogger, step: string, fn: () => Promise<T>): Promise<T> {
-  const started = Date.now();
+async function timedStep<T>(
+  logger: RunLogger,
+  clock: PipelineClock,
+  step: string,
+  fn: () => Promise<T>,
+): Promise<T> {
+  const started = clock.nowMs();
   await logger.event({ event: 'step.started', step, status: 'started' });
   try {
     const result = await fn();
@@ -132,7 +141,7 @@ async function timedStep<T>(logger: RunLogger, step: string, fn: () => Promise<T
       event: 'step.completed',
       step,
       status: 'ok',
-      duration_ms: Date.now() - started,
+      duration_ms: clock.nowMs() - started,
     });
     return result;
   } catch (error) {
@@ -140,7 +149,7 @@ async function timedStep<T>(logger: RunLogger, step: string, fn: () => Promise<T
       event: 'step.failed',
       step,
       status: 'failed',
-      duration_ms: Date.now() - started,
+      duration_ms: clock.nowMs() - started,
       detail: { message: error instanceof Error ? error.message : String(error) },
     });
     throw error;

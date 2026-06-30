@@ -27,6 +27,12 @@ The problem starts later, when someone asks what happened:
 
 This repo shows the boring but useful version: every step has a contract, every output is validated, every run writes a log, and the review gate catches unsupported claims before they enter the final brief.
 
+## Why this is AI-specific
+
+Contracts, tests and logs are not new. The agent-specific failure is different: an LLM step can produce a plausible new claim that has the right shape but no support from upstream evidence.
+
+A schema can prove that a claim has an `id`, `text` and `supported_by` field. It cannot prove that the claim deserves to be in the final brief. That is why this demo has both schema validation and a review gate. The schema checks structure; the review gate checks whether the claim has a support path.
+
 ## What the demo does
 
 Input:
@@ -70,8 +76,8 @@ claims: z.array(
 The run log is a real JSONL file:
 
 ```json
-{"event":"step.completed","step":"plan","status":"ok","duration_ms":5}
-{"event":"step.completed","step":"review","status":"ok","duration_ms":8}
+{"ts":"2026-06-30T12:00:00.130Z","run_id":"sample-run","event":"step.completed","step":"plan","status":"ok","duration_ms":20}
+{"ts":"2026-06-30T12:00:00.170Z","run_id":"sample-run","event":"step.completed","step":"review","status":"ok","duration_ms":20}
 ```
 
 The unsupported claim is visible in `examples/runs/sample-run/04-review.json`:
@@ -84,15 +90,7 @@ The unsupported claim is visible in `examples/runs/sample-run/04-review.json`:
 }
 ```
 
-The final decision is visible in `examples/runs/sample-run/05-decision.json`:
-
-```json
-{
-  "finding_id": "F-001",
-  "decision": "drop",
-  "reason": "Drop C-003 because the review gate found no upstream support."
-}
-```
+The final decision is recorded in `examples/runs/sample-run/05-decision.json`.
 
 ## Quick start
 
@@ -142,8 +140,6 @@ The core loop is small. Each agent output is validated with Zod before it reache
 
 ![Pipeline flow from request to final brief](assets/pipeline-flow.png)
 
-![Contract eval run-log model](assets/contract-eval-runlog.png)
-
 Read more:
 
 - [Architecture](docs/architecture.md)
@@ -172,6 +168,8 @@ This repo is the code sibling of `structured-ai-research-workflows`.
 - `inspectable-agent-pipelines`: how agentic software workflows keep contracts, evals, run logs and decisions inspectable.
 
 The first is about research discipline. This one is about engineering discipline.
+
+The fix for a shaky pipeline is rarely another agent. It is a contract the next step can rely on, an eval that defines success, and a run log that shows what actually happened.
 
 ## Status
 
