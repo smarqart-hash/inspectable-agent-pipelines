@@ -33,6 +33,19 @@ Contracts, tests and logs are not new. The agent-specific failure is different: 
 
 A schema can prove that a claim has an `id`, `text` and `supported_by` field. It cannot prove that the claim deserves to be in the final brief. That is why this demo has both schema validation and a review gate. The schema checks structure; the review gate checks whether the claim has a support path.
 
+## Where this pattern fits
+
+This pattern is useful when an AI workflow produces a summary, recommendation or draft decision that someone may later need to inspect, defend or revise.
+
+| Use case | What the pipeline produces | What the review gate can catch |
+| --- | --- | --- |
+| Compliance pre-review | Policy notes, control summaries, vendor-questionnaire drafts | Unsupported risk claims, missing evidence, overconfident language |
+| Marketing planning | Campaign briefs, positioning drafts, launch checklists | Unproven performance claims, vague audience assumptions, off-brand promises |
+| Sales and account research | Account briefs, pain hypotheses, outreach angles | Invented company facts, stale assumptions, unsupported buying triggers |
+| Support triage | Ticket classification, escalation notes, draft replies | Missing severity evidence, unsupported refund or escalation decisions |
+| Procurement and vendor evaluation | Notice summaries, requirement maps, decision packets | Hidden unknowns, unsupported savings claims, missed must-have requirements |
+| Product operations | Discovery summaries, risk registers, handoff briefs | Unclear user evidence, unsupported prioritization claims, lost caveats |
+
 ## What the demo does
 
 Input:
