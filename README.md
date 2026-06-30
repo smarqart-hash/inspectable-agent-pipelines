@@ -6,7 +6,7 @@ Agentic workflows need contracts, evals and run logs before they need more agent
 
 This repository is a small TypeScript reference project for building agent pipelines that can be inspected after they run.
 
-The default demo does not call an LLM. It uses deterministic mock agents so the engineering pattern is visible: Zod contracts, validated outputs, eval-style tests, JSONL run logs, review findings and a final run packet.
+The default demo does not call an LLM. It uses deterministic mock agents so the engineering pattern is visible: Zod contracts (schema checks), validated outputs, eval-style tests, JSONL run logs, review findings and a final run packet.
 
 ## Why not just chain agents?
 
@@ -56,6 +56,8 @@ The review gate drops it because no upstream evidence supports it.
 That is the point of the demo.
 
 ![Unsupported claim being dropped by the review gate](assets/failure-mode.png)
+
+Here, "dropped" does not mean hidden or forgotten. It means the claim is documented in the review record and deliberately excluded from the final brief.
 
 ## Show the receipts
 
@@ -136,7 +138,7 @@ Key files:
 
 ## Architecture
 
-The core loop is small. Each agent output is validated with Zod before it reaches the next step.
+The core loop is small. Each agent output is validated before it reaches the next step. In this demo, Zod is the TypeScript library doing that schema check.
 
 ![Pipeline flow from request to final brief](assets/pipeline-flow.png)
 

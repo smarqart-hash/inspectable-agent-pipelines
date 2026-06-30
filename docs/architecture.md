@@ -13,6 +13,8 @@ The point is to show the shape of an inspectable pipeline before adding model co
 
 ## Flow
 
+In the diagrams, "schema check" means a handoff test: does this step produce the structured object the next step expects? This demo uses Zod for that check.
+
 ![Inspectable pipeline architecture](../assets/architecture-flow.png)
 
 ## Contracts
