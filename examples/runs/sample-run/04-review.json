@@ -10,6 +10,7 @@
       "claim_id": "C-003",
       "finding": "Claim \"The extension will reduce review time by 60 percent.\" has no upstream support.",
       "required_action": "Drop the claim or add a checked evidence reference.",
+      "recommended_decision": "drop",
       "status": "resolved"
     }
   ]

@@ -1,5 +1,10 @@
 import { z } from 'zod';
-import { IsoDateTimeSchema, ReviewStatusSchema, SeveritySchema } from './common.js';
+import {
+  DecisionKindSchema,
+  IsoDateTimeSchema,
+  ReviewStatusSchema,
+  SeveritySchema,
+} from './common.js';
 
 export const REVIEW_GATE = 'review-gate';
 export const REVIEW_SCHEMA_VERSION = '1.0.0';
@@ -18,6 +23,7 @@ export const ReviewOutputSchema = z
           claim_id: z.string().min(1),
           finding: z.string().min(1),
           required_action: z.string().min(1),
+          recommended_decision: DecisionKindSchema,
           status: ReviewStatusSchema,
         })
         .strict(),

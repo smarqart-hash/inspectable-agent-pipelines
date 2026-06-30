@@ -18,6 +18,7 @@ export async function reviewGateMock(
       claim_id: claim.id,
       finding: `Claim "${claim.text}" has no upstream support.`,
       required_action: 'Drop the claim or add a checked evidence reference.',
+      recommended_decision: 'drop' as const,
       status: 'resolved' as const,
     }));
 

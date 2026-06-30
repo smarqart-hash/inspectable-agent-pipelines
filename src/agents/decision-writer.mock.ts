@@ -16,8 +16,8 @@ export async function decisionWriterMock(
   const decisions = input.review.findings.map((finding, index) => ({
     id: `D-${String(index + 1).padStart(3, '0')}`,
     finding_id: finding.id,
-    decision: 'drop' as const,
-    reason: `Dropped ${finding.claim_id} because the review gate found no upstream support.`,
+    decision: finding.recommended_decision,
+    reason: `${capitalize(finding.recommended_decision)} ${finding.claim_id} because the review gate found no upstream support.`,
   }));
 
   const output: DecisionOutput = {
@@ -49,4 +49,8 @@ export async function decisionWriterMock(
   };
 
   return applyOverrides(output, overrides);
+}
+
+function capitalize(value: string): string {
+  return `${value.slice(0, 1).toUpperCase()}${value.slice(1)}`;
 }

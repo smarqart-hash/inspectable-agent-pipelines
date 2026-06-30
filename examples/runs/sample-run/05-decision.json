@@ -7,7 +7,7 @@
       "id": "D-001",
       "finding_id": "F-001",
       "decision": "drop",
-      "reason": "Dropped C-003 because the review gate found no upstream support."
+      "reason": "Drop C-003 because the review gate found no upstream support."
     }
   ],
   "final_brief_markdown": "# Implementation Brief\n\n## Procurement notice summarizer extension\n\nTarget user: small suppliers.\n\n### Scope\n- Parse one supported procurement notice page format.\n- Produce a short summary with retained source links.\n- Show uncertainty when required fields are missing.\n\n### First Steps\n1. Create fixtures from public procurement notices.\n2. Define extraction and summary output contracts.\n3. Build a browser-side parser for the first supported page format.\n4. Render a source-linked summary panel.\n5. Add regression tests for malformed notices.\n\n### Kept Claims\n- C-001: The target users are small suppliers.\n- C-002: The MVP should preserve source links in summaries.\n\n### Dropped During Review\n- C-003: Drop the claim or add a checked evidence reference."
