@@ -158,6 +158,7 @@ The core loop is small. Each agent output is validated before it reaches the nex
 Read more:
 
 - [Architecture](docs/architecture.md)
+- [Method roots and inspirations](docs/inspirations.md)
 - [Review gates](docs/review-gates.md)
 - [Public/private boundary](docs/public-private-boundary.md)
 
