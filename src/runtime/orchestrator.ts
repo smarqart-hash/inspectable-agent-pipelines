@@ -49,8 +49,10 @@ export type PipelineSummary = {
 export async function runInspectablePipeline(options: PipelineOptions): Promise<PipelineSummary> {
   const input = validateOrThrow(ProductRequestInputSchema, { request: options.request }, 'request');
   const runId = options.runId ?? createRunId(input.request);
-  const outputDir = options.outputDir ?? join('examples', 'runs', runId);
-  const logPath = join(outputDir, 'run.jsonl');
+  // Serialized paths use posix separators so a committed run packet reads the same
+  // on every platform. Node fs accepts forward slashes on Windows.
+  const outputDir = toPosix(options.outputDir ?? join('examples', 'runs', runId));
+  const logPath = `${outputDir}/run.jsonl`;
   const clock = options.clock ?? systemClock;
   const logger = new RunLogger(runId, logPath, clock.nowIso);
   const files: string[] = [];
@@ -58,7 +60,7 @@ export async function runInspectablePipeline(options: PipelineOptions): Promise<
   await mkdir(outputDir, { recursive: true });
   await writeFile(logPath, '', 'utf8');
   files.push(logPath);
-  await writeText(join(outputDir, 'input.md'), input.request, files);
+  await writeText(`${outputDir}/input.md`, input.request, files);
   await logger.event({ event: 'run.started', status: 'started', detail: { output_dir: outputDir } });
 
   try {
@@ -69,12 +71,12 @@ export async function runInspectablePipeline(options: PipelineOptions): Promise<
         'intake-agent',
       ),
     );
-    await writeJson(join(outputDir, '01-intake.json'), intake, files);
+    await writeJson(`${outputDir}/01-intake.json`, intake, files);
 
     const risk = await timedStep(logger, clock, 'risk', async () =>
       validateOrThrow(RiskOutputSchema, await riskMock({ intake }, options.overrides?.risk), 'risk-agent'),
     );
-    await writeJson(join(outputDir, '02-risk.json'), risk, files);
+    await writeJson(`${outputDir}/02-risk.json`, risk, files);
 
     const plan = await timedStep(logger, clock, 'plan', async () =>
       validateOrThrow(
@@ -83,7 +85,7 @@ export async function runInspectablePipeline(options: PipelineOptions): Promise<
         'plan-agent',
       ),
     );
-    await writeJson(join(outputDir, '03-plan.json'), plan, files);
+    await writeJson(`${outputDir}/03-plan.json`, plan, files);
 
     const review = await timedStep(logger, clock, 'review', async () =>
       validateOrThrow(
@@ -92,7 +94,7 @@ export async function runInspectablePipeline(options: PipelineOptions): Promise<
         'review-gate',
       ),
     );
-    await writeJson(join(outputDir, '04-review.json'), review, files);
+    await writeJson(`${outputDir}/04-review.json`, review, files);
 
     const decision = await timedStep(logger, clock, 'decision', async () =>
       validateOrThrow(
@@ -101,11 +103,11 @@ export async function runInspectablePipeline(options: PipelineOptions): Promise<
         'decision-writer',
       ),
     );
-    await writeJson(join(outputDir, '05-decision.json'), decision, files);
-    await writeText(join(outputDir, 'decision-log.md'), renderDecisionLog(decision), files);
-    await writeText(join(outputDir, 'final-brief.md'), decision.final_brief_markdown, files);
+    await writeJson(`${outputDir}/05-decision.json`, decision, files);
+    await writeText(`${outputDir}/decision-log.md`, renderDecisionLog(decision), files);
+    await writeText(`${outputDir}/final-brief.md`, decision.final_brief_markdown, files);
 
-    const summaryPath = join(outputDir, 'summary.json');
+    const summaryPath = `${outputDir}/summary.json`;
     const summary: PipelineSummary = {
       run_id: runId,
       output_dir: outputDir,
@@ -154,6 +156,10 @@ async function timedStep<T>(
     });
     throw error;
   }
+}
+
+function toPosix(value: string): string {
+  return value.replace(/\\/g, '/');
 }
 
 async function writeJson(path: string, value: unknown, files: string[]): Promise<void> {

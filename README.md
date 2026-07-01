@@ -1,5 +1,7 @@
 # Inspectable Agent Pipelines
 
+[![CI](https://github.com/smarqart-hash/inspectable-agent-pipelines/actions/workflows/ci.yml/badge.svg)](https://github.com/smarqart-hash/inspectable-agent-pipelines/actions/workflows/ci.yml)
+
 Agentic workflows need contracts, evals and run logs before they need more agents.
 
 ![Inspectable Agent Pipelines social preview](assets/social-preview.png)

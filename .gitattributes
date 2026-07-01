@@ -1,0 +1,5 @@
+# Normalize line endings to LF so the committed run packet stays byte-identical
+# across platforms. The CI reproducibility check (git diff on the sample run)
+# depends on this.
+* text=auto eol=lf
+*.png binary
