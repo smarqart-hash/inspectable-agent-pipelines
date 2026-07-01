@@ -19,7 +19,9 @@ export async function reviewGateMock(
       finding: `Claim "${claim.text}" has no upstream support.`,
       required_action: 'Drop the claim or add a checked evidence reference.',
       recommended_decision: 'drop' as const,
-      status: 'resolved' as const,
+      // The gate raises the finding as open. Resolution is recorded downstream in
+      // the decision log, so the review artifact never claims an outcome it did not make.
+      status: 'open' as const,
     }));
 
   const output: ReviewOutput = {

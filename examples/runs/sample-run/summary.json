@@ -3,16 +3,16 @@
   "output_dir": "examples/runs/sample-run",
   "verdict": "pass_with_findings",
   "files": [
-    "examples\\runs\\sample-run\\run.jsonl",
-    "examples\\runs\\sample-run\\input.md",
-    "examples\\runs\\sample-run\\01-intake.json",
-    "examples\\runs\\sample-run\\02-risk.json",
-    "examples\\runs\\sample-run\\03-plan.json",
-    "examples\\runs\\sample-run\\04-review.json",
-    "examples\\runs\\sample-run\\05-decision.json",
-    "examples\\runs\\sample-run\\decision-log.md",
-    "examples\\runs\\sample-run\\final-brief.md",
-    "examples\\runs\\sample-run\\summary.json"
+    "examples/runs/sample-run/run.jsonl",
+    "examples/runs/sample-run/input.md",
+    "examples/runs/sample-run/01-intake.json",
+    "examples/runs/sample-run/02-risk.json",
+    "examples/runs/sample-run/03-plan.json",
+    "examples/runs/sample-run/04-review.json",
+    "examples/runs/sample-run/05-decision.json",
+    "examples/runs/sample-run/decision-log.md",
+    "examples/runs/sample-run/final-brief.md",
+    "examples/runs/sample-run/summary.json"
   ],
   "findings": 1
 }

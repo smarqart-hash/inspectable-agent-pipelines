@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      # Regenerate the sample run and fail if it drifts from the committed packet.
+      # The pipeline's own output is part of the contract, so it must stay reproducible.
+      - run: npm run demo
+      - name: Verify sample run is reproducible
+        run: git diff --exit-code examples/runs/sample-run
